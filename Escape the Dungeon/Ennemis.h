@@ -2,13 +2,46 @@
 #define ENNEMIS_H
 
 #include <SFML/Graphics.hpp>
-#include "Entity.h"
+#include "Player.h"
 
-class Ennemis : public Entity
+class ChaserEnemy : public Entity
 {
-public:
-
 private:
+	sf::RectangleShape chaser;
+
+	float speed = 0.1f;
+	Player* player;
+	sf::Clock updateclock;
+	sf::Time updatetime;
+
+public:
+	ChaserEnemy(Player& _player);
+
+	void init() override;
+	void update(float deltaTime) override;
+	void draw(sf::RenderWindow& window) override;
+	void brain();
+	std::string tag = "Chaser";
+
+};
+
+class PatrollingEnemy : public Entity
+{
+private:
+	sf::RectangleShape chaser;
+
+	float speed = 0.1f;
+
+	sf::Clock updateclock;
+	sf::Time updatetime;
+
+public:
+	PatrollingEnemy();
+
+	void init() override;
+	void update(float deltaTime) override;
+	void draw(sf::RenderWindow& window) override;
+	std::string tag = "Patrolling";
 
 };
 
