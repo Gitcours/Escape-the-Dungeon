@@ -2,20 +2,21 @@
 #define OBJETS_H
 
 #include <SFML/Graphics.hpp>
-#include "Entity.h"
-#include "outils.cpp"
+#include "Player.h"
+#include "outils.h"
 
-class Objets : public Entity
+class SpeedPotion : public Entity
 {
 private:
 
 public:
-	Objets();
-	void init() override;
+	SpeedPotion();
+	~SpeedPotion();
+	sf::RectangleShape spotion;
+	void interact(Player& _player);
 	void update(float deltaTime) override;
 	void draw(sf::RenderWindow& window) override;
-	void handleInput(const sf::Event& event, sf::RenderWindow& window);
-	std::string tag = "Objets";
+	std::string tag = "SpeedPotion";
 };
 
 #endif

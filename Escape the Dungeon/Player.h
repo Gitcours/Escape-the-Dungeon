@@ -10,12 +10,25 @@ class Player : public Entity
 {
 private:
 
-	float speed = 0.1f;
+	float speed = 0.5f;
+	float normalisation = std::sqrt(2);
+	float potiontimer = 0;
 
 	bool isUp = false;
 	bool isDown = false;
 	bool isLeft = false;
 	bool isRight = false;
+
+	bool isspeedpot = false;
+
+	enum direction {
+		up,
+		down,
+		left,
+		right
+	};
+
+	bool isinbound(sf::RectangleShape sprite, int direction);
 
 	sf::Clock updateclock;
 	sf::Time updatetime;
@@ -23,11 +36,12 @@ private:
 public:
 	Player();
 	sf::RectangleShape player;
-	void init() override;
+
 	void update(float deltaTime) override;
 	void draw(sf::RenderWindow& window) override;
-	void movements();
 	void handleInput(const sf::Event& event, sf::RenderWindow& window);
+	void potionhandler(int potion);
+	void potiontimerupdate(float deltaTime);
 	std::string tag = "Player";
 };
 

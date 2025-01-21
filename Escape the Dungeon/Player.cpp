@@ -3,33 +3,143 @@
 Player::Player(){
 	player.setSize(sf::Vector2f(50, 50));
 	player.setFillColor(sf::Color::Green);
-	player.setPosition(400, 300);
+	player.setPosition(windowSize.x/2, windowSize.y/2);
 };
 
-void Player::init() {
-//	player.setSize(sf::Vector2f(50, 50));
-//	player.setFillColor(sf::Color::Green);
-//	player.setPosition(400, 300);
+bool Player::isinbound(sf::RectangleShape sprite, int direction) {
+	switch (direction)
+	{
+	case direction::up:
+		return sprite.getPosition().y > 0;
+		break;
+	case direction::down:
+		return sprite.getPosition().y < windowSize.y - sprite.getSize().y;
+		break;
+	case direction::left:
+		return sprite.getPosition().x > 0;
+		break;
+	case direction::right:
+		return sprite.getPosition().x < windowSize.x - sprite.getSize().x;
+		break;
+	default:
+		return false;
+		break;
+	}
 }
 
-void Player::update(float deltaTime) {
+void Player::potionhandler(int potion) {
+	switch (potion)
+	{
+	case 0:
+		potiontimer = 5.f;
+		speed *= 2;
+		isspeedpot = true;
+		break;
+	default:
+		break;
+	}
+}
+
+void Player::potiontimerupdate(float deltaTime)
+{
 	updatetime = sf::milliseconds(deltaTime);
 	if (updateclock.getElapsedTime() >= updatetime)
 	{
 		updateclock.restart();
-		if (isUp)
+		if (isspeedpot)
 		{
-			player.move(0, -speed);
+			if (potiontimer > 0)
+			{
+				std::cout << potiontimer << std::endl;
+				potiontimer -= 1;
+			}
+			else
+			{
+				std::cout << "STOP";
+				isspeedpot = false;
+				speed /= 2;
+			}
 		}
-		if (isDown)
+	}
+}
+
+void Player::update(float deltaTime) {
+	updatetime = sf::milliseconds(deltaTime);
+
+	if (updateclock.getElapsedTime() >= updatetime)
+	{
+		updateclock.restart();
+		if ((isUp && !isDown && !isLeft && !isRight) || (isLeft && isRight && isUp && !isDown))
 		{
-			player.move(0, speed);
+			if (isinbound(player, direction::up))
+			{
+				player.move(0, -speed);
+			}
 		}
-		if (isLeft) {
-			player.move(-speed, 0);
+		if ((isDown && !isUp && !isLeft && !isRight) || (isLeft && isRight && !isUp && isDown))
+		{
+			if (isinbound(player, direction::down))
+			{
+				player.move(0, speed);
+			}
 		}
-		if (isRight) {
-			player.move(speed, 0);
+		if ((isLeft && !isRight && !isUp && !isDown) || (isUp && isDown && isLeft && !isRight))
+		{
+			if (isinbound(player, direction::left))
+			{
+				player.move(-speed, 0);
+			}
+		}
+		if ((isRight && !isLeft && !isUp && !isDown) || (isUp && isDown && !isLeft && isRight))
+		{
+			if (isinbound(player, direction::right))
+			{
+				player.move(speed, 0);
+			}
+		}
+		if (isUp && isLeft && !isDown && !isRight)
+		{
+			if (isinbound(player, direction::up))
+			{
+				player.move(0, -speed / normalisation);
+			}
+			if (isinbound(player, direction::left))
+			{
+				player.move(-speed / normalisation, 0);
+			}
+		}
+		if (isUp && isRight && !isDown && !isLeft)
+		{
+			if (isinbound(player, direction::up))
+			{
+				player.move(0, -speed / normalisation);
+			}
+			if (isinbound(player, direction::right))
+			{
+				player.move(speed / normalisation, 0);
+			}
+		}
+		if (isDown && isLeft && !isUp && !isRight)
+		{
+			if (isinbound(player, direction::down))
+			{
+				player.move(0, speed / normalisation);
+			}
+			if (isinbound(player, direction::left))
+			{
+				player.move(-speed / normalisation, 0);
+			}
+		}
+		if (isDown && isRight && !isUp && !isLeft)
+		{
+			if (isinbound(player, direction::down))
+			{
+				player.move(0, speed / normalisation);
+			}
+			if (isinbound(player, direction::right))
+			{
+				player.move(speed / normalisation, 0);
+			}
 		}
 	}
 }

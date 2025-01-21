@@ -7,8 +7,6 @@
 class ChaserEnemy : public Entity
 {
 private:
-	sf::RectangleShape chaser;
-
 	float speed = 0.1f;
 	Player* player;
 	sf::Clock updateclock;
@@ -17,20 +15,18 @@ private:
 public:
 	ChaserEnemy(Player& _player);
 
-	void init() override;
-	void update(float deltaTime) override;
-	void draw(sf::RenderWindow& window) override;
-	void brain();
+	sf::RectangleShape chaser;
 	std::string tag = "Chaser";
 
+	void update(float deltaTime) override;
+	void draw(sf::RenderWindow& window) override;
 };
 
 class PatrollingEnemy : public Entity
 {
 private:
-	sf::RectangleShape chaser;
-
 	float speed = 0.1f;
+	int direction = 0;
 
 	sf::Clock updateclock;
 	sf::Time updatetime;
@@ -38,11 +34,11 @@ private:
 public:
 	PatrollingEnemy();
 
-	void init() override;
-	void update(float deltaTime) override;
-	void draw(sf::RenderWindow& window) override;
+	sf::RectangleShape Patrolling;
 	std::string tag = "Patrolling";
 
+	void update(float deltaTime) override;
+	void draw(sf::RenderWindow& window) override;
 };
 
 #endif // !ENNEMIS_H
