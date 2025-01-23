@@ -3,15 +3,18 @@
 #include <thread>
 #include "Player.h"
 #include "Ennemis.h"
+//#include "Map.h"
 #include "Objets.h"
 
 sf::RenderWindow window(sf::VideoMode(windowSize.x, windowSize.y), "Escape the Dungeon");
 sf::Event event;
 
 Player* player = new Player();
+//Map map;
 std::vector<ChaserEnemy> chaser;
 std::vector<PatrollingEnemy> patrolling;
 std::vector<SpeedPotion> speedpotion;
+std::vector<Key> key;
 
 
 const sf::Keyboard::Key Pause = sf::Keyboard::Escape;
@@ -34,11 +37,15 @@ void init() {
 	{
 		speedpotion.push_back(SpeedPotion());
 	}
+	for (int i = 0; i < 1; i++)
+	{
+		key.push_back(Key());
+	}
 }
 
 void update() {
 	player->update(2.f);
-	player->potiontimerupdate(2.f);
+	player->effecttimerupdate(1000.f);
 	for (int i = 0; i < chaser.size(); i++)
 	{
 		if (chaser[i].chaser.getGlobalBounds().intersects(player->player.getGlobalBounds()))
@@ -68,12 +75,16 @@ void update() {
 	{
 		if (speedpotion[i].spotion.getGlobalBounds().intersects(player->player.getGlobalBounds()))
 		{
-			player->potionhandler(0);
+			player->itemshandler(0);
 			speedpotion.erase(speedpotion.begin() + i);
 		}
-		else
+	}
+	for (int i = 0; i < key.size(); i++)
+	{
+		if (key[i].key.getGlobalBounds().intersects(player->player.getGlobalBounds())) 
 		{
-			speedpotion[i].update(2.5f);
+			player->itemshandler(1);
+			key.erase(key.begin() + i);
 		}
 	}
 }
@@ -92,6 +103,10 @@ void affichage() {
 	for (int i = 0; i < speedpotion.size(); i++)
 	{
 		speedpotion[i].draw(window);
+	}
+	for (int i = 0; i < key.size(); i++)
+	{
+		key[i].draw(window);
 	}
 	window.display();
 }

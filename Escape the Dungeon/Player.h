@@ -10,16 +10,16 @@ class Player : public Entity
 {
 private:
 
-	float speed = 0.5f;
-	float normalisation = std::sqrt(2);
-	float potiontimer = 0;
+	float speed;
+	float normalisation;
+	float effecttimer;
 
-	bool isUp = false;
-	bool isDown = false;
-	bool isLeft = false;
-	bool isRight = false;
+	bool isUp;
+	bool isDown;
+	bool isLeft;
+	bool isRight;
 
-	bool isspeedpot = false;
+	bool isspeedpot;
 
 	enum direction {
 		up,
@@ -28,20 +28,24 @@ private:
 		right
 	};
 
-	bool isinbound(sf::RectangleShape sprite, int direction);
+	bool isinbound(sf::RectangleShape& sprite, int direction);
 
 	sf::Clock updateclock;
 	sf::Time updatetime;
+	sf::Clock updatepotclock;
+	sf::Time updatepottime;
 
 public:
 	Player();
 	sf::RectangleShape player;
 
+	bool haskey;
+
 	void update(float deltaTime) override;
 	void draw(sf::RenderWindow& window) override;
 	void handleInput(const sf::Event& event, sf::RenderWindow& window);
-	void potionhandler(int potion);
-	void potiontimerupdate(float deltaTime);
+	void itemshandler(int item);
+	void effecttimerupdate(float deltaTime);
 	std::string tag = "Player";
 };
 

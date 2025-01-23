@@ -2,10 +2,11 @@
 #define OBJETS_H
 
 #include <SFML/Graphics.hpp>
-#include "Player.h"
+#include <iostream>
+#include "Interact.h"
 #include "outils.h"
 
-class SpeedPotion : public Entity
+class SpeedPotion : public Interact
 {
 private:
 
@@ -13,10 +14,20 @@ public:
 	SpeedPotion();
 	~SpeedPotion();
 	sf::RectangleShape spotion;
-	void interact(Player& _player);
-	void update(float deltaTime) override;
 	void draw(sf::RenderWindow& window) override;
 	std::string tag = "SpeedPotion";
+};
+
+class Key : public Interact
+{
+private:
+
+public:
+	Key();
+	~Key();
+	sf::RectangleShape key;
+	void draw(sf::RenderWindow& window) override;
+	std::string tag = "key";
 };
 
 #endif

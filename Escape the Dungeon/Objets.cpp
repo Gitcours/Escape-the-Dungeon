@@ -7,17 +7,21 @@ SpeedPotion::SpeedPotion() {
 };
 
 SpeedPotion::~SpeedPotion() {
-	std::cout << "SpeedPotion detruit" << std::endl;
-}
-
-void SpeedPotion::update(float deltaTime) {
-	updatetime = sf::milliseconds(deltaTime);
-	if (updateclock.getElapsedTime() >= updatetime)
-	{
-		updateclock.restart();
-	}
 }
 
 void SpeedPotion::draw(sf::RenderWindow& window) {
 	window.draw(spotion);
+}
+
+Key::Key() {
+	key.setSize(sf::Vector2f(20, 20));
+	key.setFillColor(sf::Color::Magenta);
+	key.setPosition(gennbint(0, windowSize.x), gennbint(0, windowSize.y));
+}
+
+Key::~Key() {
+}
+
+void Key::draw(sf::RenderWindow& window) {
+	window.draw(key);
 }

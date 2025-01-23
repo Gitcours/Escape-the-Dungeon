@@ -1,12 +1,14 @@
 #include "Player.h"
 
-Player::Player(){
+Player::Player()
+	: isUp(false), isDown(false), isLeft(false), isRight(false), speed(0.5f), normalisation(std::sqrt(2)), effecttimer(0), haskey(false)
+{
 	player.setSize(sf::Vector2f(50, 50));
 	player.setFillColor(sf::Color::Green);
 	player.setPosition(windowSize.x/2, windowSize.y/2);
 };
 
-bool Player::isinbound(sf::RectangleShape sprite, int direction) {
+bool Player::isinbound(sf::RectangleShape& sprite, int direction) {
 	switch (direction)
 	{
 	case direction::up:
@@ -27,35 +29,37 @@ bool Player::isinbound(sf::RectangleShape sprite, int direction) {
 	}
 }
 
-void Player::potionhandler(int potion) {
-	switch (potion)
+void Player::itemshandler(int item) {
+	switch (item)
 	{
 	case 0:
-		potiontimer = 5.f;
+		effecttimer = 5.f;
 		speed *= 2;
 		isspeedpot = true;
+		break;
+	case 1:
+		haskey = true;
 		break;
 	default:
 		break;
 	}
 }
 
-void Player::potiontimerupdate(float deltaTime)
-{
-	updatetime = sf::milliseconds(deltaTime);
-	if (updateclock.getElapsedTime() >= updatetime)
+void Player::effecttimerupdate(float deltaTime){
+
+	updatepottime = sf::milliseconds(deltaTime);
+
+	if (updatepotclock.getElapsedTime() >= updatepottime)
 	{
-		updateclock.restart();
+		updatepotclock.restart();
 		if (isspeedpot)
 		{
-			if (potiontimer > 0)
+			if (effecttimer > 0)
 			{
-				std::cout << potiontimer << std::endl;
-				potiontimer -= 1;
+				effecttimer -= 1;
 			}
 			else
 			{
-				std::cout << "STOP";
 				isspeedpot = false;
 				speed /= 2;
 			}
@@ -64,6 +68,7 @@ void Player::potiontimerupdate(float deltaTime)
 }
 
 void Player::update(float deltaTime) {
+
 	updatetime = sf::milliseconds(deltaTime);
 
 	if (updateclock.getElapsedTime() >= updatetime)
@@ -185,6 +190,7 @@ void Player::handleInput(const sf::Event& event, sf::RenderWindow& window) {
 		break;
 	}
 }
+
 void Player::draw(sf::RenderWindow& window) {
 	window.draw(player);
 }

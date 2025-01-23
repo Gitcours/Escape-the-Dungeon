@@ -134,7 +134,9 @@
   <ItemGroup>
     <ClCompile Include="Ennemis.cpp" />
     <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Interact.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
     <ClCompile Include="Objets.cpp" />
     <ClCompile Include="outils.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -142,6 +144,8 @@
   <ItemGroup>
     <ClInclude Include="Ennemis.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Interact.h" />
+    <ClInclude Include="Map.h" />
     <ClInclude Include="Objets.h" />
     <ClInclude Include="outils.h" />
     <ClInclude Include="Player.h" />
