@@ -3,14 +3,14 @@
 #include <thread>
 #include "Player.h"
 #include "Ennemis.h"
-//#include "Map.h"
+#include "Map.h"
 #include "Objets.h"
 
 sf::RenderWindow window(sf::VideoMode(windowSize.x, windowSize.y), "Escape the Dungeon");
 sf::Event event;
 
 Player* player = new Player();
-//Map map;
+Map map;
 std::vector<ChaserEnemy> chaser;
 std::vector<PatrollingEnemy> patrolling;
 std::vector<SpeedPotion> speedpotion;
@@ -18,12 +18,21 @@ std::vector<Key> key;
 
 
 const sf::Keyboard::Key Pause = sf::Keyboard::Escape;
+sf::RectangleShape Pausemenu(sf::Vector2f(windowSize.x / 2, windowSize.y / 2));
 
 bool playeralive = true;
 bool isPaused = false;
-bool canPause = false;
+bool canPause = true;
 
 void init() {
+	srand(time(NULL));
+	gennbint(0, 0);
+	gennbint(0, 0);
+	gennbint(0, 0);
+
+	Pausemenu.setFillColor(sf::Color(255, 255, 255, 0));
+	Pausemenu.setPosition(sf::Vector2f(windowSize.x / 2 - Pausemenu.getSize().x / 2, windowSize.y / 2 - Pausemenu.getSize().y / 2));
+
 	for (int i = 0; i < 10; i++)
 	{
 		chaser.push_back(ChaserEnemy(*player));
@@ -92,6 +101,7 @@ void update() {
 void affichage() {
 	window.clear(/*sf::Color::Black*/);
 	player->draw(window);
+	map.draw(window);
 	for (int i = 0; i < chaser.size(); i++)
 	{
 		chaser[i].draw(window);
@@ -108,17 +118,18 @@ void affichage() {
 	{
 		key[i].draw(window);
 	}
+	window.draw(Pausemenu);
 	window.display();
 }
 
 int main() {
 	init();
 	while (window.isOpen()) {
-		if (playeralive)
+		if (playeralive && !isPaused)
 		{
 			update();
-			affichage();
 		}
+		affichage();
 		while (window.pollEvent(event)) {
 			player->handleInput(event, window);
 			switch (event.type)
@@ -129,19 +140,29 @@ int main() {
 				case Pause:
 					if (canPause)
 					{
-						std::cout << "Pause" << std::endl;
 						isPaused = !isPaused;
 						canPause = false;
+						if (isPaused)
+						{
+							Pausemenu.setFillColor(sf::Color(255, 255, 255, 255));
+						}
+						else
+						{
+							Pausemenu.setFillColor(sf::Color(255, 255, 255, 0));
+						}
 					}
 					break;
 				default:
 					break;
 				}
+				break;
 			case sf::Event::KeyReleased:
 				switch (event.key.code)
 				{
 				case Pause:
 					canPause = true;
+					break;
+				default:
 					break;
 				}
 				break;
