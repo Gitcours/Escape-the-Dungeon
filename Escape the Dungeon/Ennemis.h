@@ -13,7 +13,7 @@ private:
 	sf::Time updatetime;
 
 public:
-	ChaserEnemy(Player& _player);
+	ChaserEnemy(Player& _player, sf::Vector2f posxy);
 
 	sf::RectangleShape chaser;
 	std::string tag = "Chaser";
@@ -32,7 +32,7 @@ private:
 	sf::Time updatetime;
 
 public:
-	PatrollingEnemy();
+	PatrollingEnemy(sf::Vector2f posxy, int dir);
 
 	sf::RectangleShape Patrolling;
 	std::string tag = "Patrolling";

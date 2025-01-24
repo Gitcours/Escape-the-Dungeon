@@ -11,7 +11,7 @@ class SpeedPotion : public Interact
 private:
 
 public:
-	SpeedPotion();
+	SpeedPotion(sf::Vector2f posxy);
 	~SpeedPotion();
 	sf::RectangleShape spotion;
 	void draw(sf::RenderWindow& window) override;
@@ -23,7 +23,7 @@ class Key : public Interact
 private:
 
 public:
-	Key();
+	Key(sf::Vector2f posxy);
 	~Key();
 	sf::RectangleShape key;
 	void draw(sf::RenderWindow& window) override;

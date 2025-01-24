@@ -6,16 +6,19 @@
 #include <fstream>
 #include <vector>
 
+#include "outils.h"
+
 class Map {
 public:
-	Map();
+	Map(std::string mapfiledir);
 	void draw(sf::RenderWindow& window);
-private:
-	std::vector<int> elements;
-	std::string line;
-	std::ifstream mapfile;
 	std::vector<sf::RectangleShape> walls;
 	std::vector<sf::RectangleShape> door;
+	std::vector<int> elements;
+
+private:
+	std::string line;
+	std::ifstream mapfile;
 };
 
 #endif

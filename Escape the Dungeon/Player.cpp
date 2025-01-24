@@ -1,32 +1,36 @@
 #include "Player.h"
 
-Player::Player()
-	: isUp(false), isDown(false), isLeft(false), isRight(false), speed(0.5f), normalisation(std::sqrt(2)), effecttimer(0), haskey(false)
+Player::Player(sf::RenderWindow& windowref, std::vector<sf::RectangleShape>& wallsref, sf::Vector2f posxy)
+	: isUp(false), isDown(false), isLeft(false), isRight(false), speed(1.f), normalisation(std::sqrt(2)), effecttimer(0), haskey(false), window(windowref), wallsvector(wallsref)
 {
-	player.setSize(sf::Vector2f(50, 50));
+	player.setSize(sf::Vector2f(30, 30));
 	player.setFillColor(sf::Color::Green);
-	player.setPosition(windowSize.x/2, windowSize.y/2);
+	player.setPosition(posxy);
 };
 
-bool Player::isinbound(sf::RectangleShape& sprite, int direction) {
-	switch (direction)
-	{
+bool Player::isinbound(sf::RectangleShape& wallssprite, sf::RectangleShape& playersprite, int direction) {
+	sf::RectangleShape playerBounds(sf::Vector2f(playersprite.getGlobalBounds().width, playersprite.getGlobalBounds().height));
+	sf::RectangleShape wallBounds(sf::Vector2f(wallssprite.getGlobalBounds().width, wallssprite.getGlobalBounds().height));
+
+	wallBounds.setPosition(wallssprite.getPosition().x, wallssprite.getPosition().y);
+
+	switch (direction) {
 	case direction::up:
-		return sprite.getPosition().y > 0;
+		playerBounds.setPosition(playersprite.getPosition().x, playersprite.getPosition().y - speed);
 		break;
 	case direction::down:
-		return sprite.getPosition().y < windowSize.y - sprite.getSize().y;
+		playerBounds.setPosition(playersprite.getPosition().x, playersprite.getPosition().y + speed);
 		break;
 	case direction::left:
-		return sprite.getPosition().x > 0;
+		playerBounds.setPosition(playersprite.getPosition().x - speed, playersprite.getPosition().y);
 		break;
 	case direction::right:
-		return sprite.getPosition().x < windowSize.x - sprite.getSize().x;
+		playerBounds.setPosition(playersprite.getPosition().x + speed, playersprite.getPosition().y);
 		break;
 	default:
 		return false;
-		break;
 	}
+	return playerBounds.getGlobalBounds().intersects(wallBounds.getGlobalBounds());
 }
 
 void Player::itemshandler(int item) {
@@ -67,81 +71,197 @@ void Player::effecttimerupdate(float deltaTime){
 	}
 }
 
-void Player::update(float deltaTime) {
+void Player::update(float deltaTime) {}
+
+void Player::playerupdate(float deltaTime, std::vector<sf::RectangleShape>& wallsref) {
 
 	updatetime = sf::milliseconds(deltaTime);
 
 	if (updateclock.getElapsedTime() >= updatetime)
 	{
 		updateclock.restart();
+		wallsvector = wallsref;
 		if ((isUp && !isDown && !isLeft && !isRight) || (isLeft && isRight && isUp && !isDown))
 		{
-			if (isinbound(player, direction::up))
+			bool tempval = true;
+			for (int i = 0; i < wallsvector.size(); i++)
+			{
+				if (isinbound(wallsvector[i], player, direction::up))
+				{
+					tempval = false;
+					break;
+				}
+			}
+			if (tempval)
 			{
 				player.move(0, -speed);
 			}
 		}
 		if ((isDown && !isUp && !isLeft && !isRight) || (isLeft && isRight && !isUp && isDown))
 		{
-			if (isinbound(player, direction::down))
+			bool tempval = true;
+			for (int i = 0; i < wallsvector.size(); i++)
+			{
+				if (isinbound(wallsvector[i], player, direction::down))
+				{
+					tempval = false;
+					break;
+				}
+			}
+
+			if (tempval)
 			{
 				player.move(0, speed);
 			}
 		}
 		if ((isLeft && !isRight && !isUp && !isDown) || (isUp && isDown && isLeft && !isRight))
 		{
-			if (isinbound(player, direction::left))
+			bool tempval = true;
+			for (int i = 0; i < wallsvector.size(); i++)
+			{
+				if (isinbound(wallsvector[i], player, direction::left))
+				{
+					tempval = false;
+					break;
+				}
+			}
+			if (tempval)
 			{
 				player.move(-speed, 0);
 			}
 		}
 		if ((isRight && !isLeft && !isUp && !isDown) || (isUp && isDown && !isLeft && isRight))
 		{
-			if (isinbound(player, direction::right))
+			bool tempval = true;
+			for (int i = 0; i < wallsvector.size(); i++)
+			{
+				if (isinbound(wallsvector[i], player, direction::right))
+				{
+					tempval = false;
+					break;
+				}
+			}
+			if (tempval)
 			{
 				player.move(speed, 0);
 			}
 		}
 		if (isUp && isLeft && !isDown && !isRight)
 		{
-			if (isinbound(player, direction::up))
+			bool tempval = true;
+			for (int i = 0; i < wallsvector.size(); i++)
+			{
+				if (isinbound(wallsvector[i], player, direction::up))
+				{
+					tempval = false;
+					break;
+				}
+			}
+			if (tempval)
 			{
 				player.move(0, -speed / normalisation);
 			}
-			if (isinbound(player, direction::left))
+
+			bool tempvalb = true;
+			for (int i = 0; i < wallsvector.size(); i++)
+			{
+				if (isinbound(wallsvector[i], player, direction::left))
+				{
+					tempvalb = false;
+					break;
+				}
+			}
+			if (tempvalb)
 			{
 				player.move(-speed / normalisation, 0);
 			}
 		}
 		if (isUp && isRight && !isDown && !isLeft)
 		{
-			if (isinbound(player, direction::up))
+			bool tempval = true;
+			for (int i = 0; i < wallsvector.size(); i++)
+			{
+				if (isinbound(wallsvector[i], player, direction::up))
+				{
+					tempval = false;
+					break;
+				}
+			}
+			if (tempval)
 			{
 				player.move(0, -speed / normalisation);
 			}
-			if (isinbound(player, direction::right))
+
+			bool tempvalb = true;
+			for (int i = 0; i < wallsvector.size(); i++)
+			{
+				if (isinbound(wallsvector[i], player, direction::right))
+				{
+					tempvalb = false;
+					break;
+				}
+			}
+			if (tempvalb)
 			{
 				player.move(speed / normalisation, 0);
 			}
 		}
 		if (isDown && isLeft && !isUp && !isRight)
 		{
-			if (isinbound(player, direction::down))
+			bool tempval = true;
+			for (int i = 0; i < wallsvector.size(); i++)
+			{
+				if (isinbound(wallsvector[i], player, direction::down))
+				{
+					tempval = false;
+					break;
+				}
+			}
+			if (tempval)
 			{
 				player.move(0, speed / normalisation);
 			}
-			if (isinbound(player, direction::left))
+
+			bool tempvalb = true;
+			for (int i = 0; i < wallsvector.size(); i++)
+			{
+				if (isinbound(wallsvector[i], player, direction::left))
+				{
+					tempvalb = false;
+					break;
+				}
+			}
+			if (tempvalb)
 			{
 				player.move(-speed / normalisation, 0);
 			}
 		}
 		if (isDown && isRight && !isUp && !isLeft)
 		{
-			if (isinbound(player, direction::down))
+			bool tempval = true;
+			for (int i = 0; i < wallsvector.size(); i++)
+			{
+				if (isinbound(wallsvector[i], player, direction::down))
+				{
+					tempval = false;
+					break;
+				}
+			}
+			if (tempval)
 			{
 				player.move(0, speed / normalisation);
 			}
-			if (isinbound(player, direction::right))
+
+			bool tempvalb = true;
+			for (int i = 0; i < wallsvector.size(); i++)
+			{
+				if (isinbound(wallsvector[i], player, direction::right))
+				{
+					tempvalb = false;
+					break;
+				}
+			}
+			if (tempvalb)
 			{
 				player.move(speed / normalisation, 0);
 			}
@@ -149,12 +269,10 @@ void Player::update(float deltaTime) {
 	}
 }
 
-void Player::handleInput(const sf::Event& event, sf::RenderWindow& window) {
-	switch (event.type)
-	{
+void Player::handleInput(const sf::Event& event) {
+	switch (event.type) {
 	case sf::Event::KeyPressed:
-		switch (event.key.code)
-		{
+		switch (event.key.code) {
 		case sf::Keyboard::Z:
 			isUp = true;
 			break;
@@ -172,8 +290,7 @@ void Player::handleInput(const sf::Event& event, sf::RenderWindow& window) {
 		}
 		break;
 	case sf::Event::KeyReleased:
-		switch (event.key.code)
-		{
+		switch (event.key.code) {
 		case sf::Keyboard::Z:
 			isUp = false;
 			break;

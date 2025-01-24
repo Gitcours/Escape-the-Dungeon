@@ -1,9 +1,9 @@
 #include "Objets.h"
 
-SpeedPotion::SpeedPotion() {
+SpeedPotion::SpeedPotion(sf::Vector2f posxy) {
 	spotion.setSize(sf::Vector2f(20, 20));
 	spotion.setFillColor(sf::Color::Blue);
-	spotion.setPosition(gennbint(0, windowSize.x), gennbint(0, windowSize.y));
+	spotion.setPosition(posxy);
 };
 
 SpeedPotion::~SpeedPotion() {
@@ -13,10 +13,10 @@ void SpeedPotion::draw(sf::RenderWindow& window) {
 	window.draw(spotion);
 }
 
-Key::Key() {
+Key::Key(sf::Vector2f posxy) {
 	key.setSize(sf::Vector2f(20, 20));
 	key.setFillColor(sf::Color::Magenta);
-	key.setPosition(gennbint(0, windowSize.x), gennbint(0, windowSize.y));
+	key.setPosition(posxy);
 }
 
 Key::~Key() {

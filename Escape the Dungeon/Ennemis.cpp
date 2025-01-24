@@ -1,26 +1,10 @@
 #include "Ennemis.h"
 
 
-ChaserEnemy::ChaserEnemy(Player& _player) : player(&_player) {
-	chaser.setSize(sf::Vector2f(50, 50));
+ChaserEnemy::ChaserEnemy(Player& _player, sf::Vector2f posxy) : player(&_player) {
+	chaser.setSize(sf::Vector2f(40, 40));
 	chaser.setFillColor(sf::Color::Red);
-	switch (int(gennbint(0,4)))
-	{
-	case 0:
-		chaser.setPosition(-chaser.getSize().x, gennbint(0, windowSize.y));
-		break;
-	case 1:
-		chaser.setPosition(windowSize.x, gennbint(0, windowSize.y));
-		break;
-	case 2:
-		chaser.setPosition(gennbint(0, windowSize.x), -chaser.getSize().y);
-		break;
-	case 3:
-		chaser.setPosition(gennbint(0, windowSize.x), windowSize.y);
-		break;
-	default:
-		break;
-	}
+	chaser.setPosition(posxy);
 };
 
 void ChaserEnemy::update(float deltaTime)
@@ -53,30 +37,10 @@ void ChaserEnemy::draw(sf::RenderWindow& window)
 	window.draw(chaser);
 }
 
-PatrollingEnemy::PatrollingEnemy() {
-	Patrolling.setSize(sf::Vector2f(50, 50));
+PatrollingEnemy::PatrollingEnemy(sf::Vector2f posxy, int dir) : direction(dir) {
+	Patrolling.setSize(sf::Vector2f(70, 70));
 	Patrolling.setFillColor(sf::Color::Yellow);
-	switch (int(gennbint(0, 4)))
-	{
-	case 0:
-		Patrolling.setPosition(-Patrolling.getSize().x, gennbint(0, windowSize.y));
-		direction = 0;
-		break;
-	case 1:
-		Patrolling.setPosition(windowSize.x, gennbint(0, windowSize.y));
-		direction = 1;
-		break;
-	case 2:
-		Patrolling.setPosition(gennbint(0, windowSize.x), -Patrolling.getSize().y);
-		direction = 2;
-		break;
-	case 3:
-		Patrolling.setPosition(gennbint(0, windowSize.x), windowSize.y);
-		direction = 3;
-		break;
-	default:
-		break;
-	}
+	Patrolling.setPosition(posxy);
 };
 
 void PatrollingEnemy::update(float deltaTime)
@@ -95,7 +59,7 @@ void PatrollingEnemy::update(float deltaTime)
 			break;
 		case 1:
 			Patrolling.move(-speed, 0);
-			if (Patrolling.getPosition().x < 0)
+			if (Patrolling.getPosition().x <= 0)
 			{
 				direction = 0;
 			}
